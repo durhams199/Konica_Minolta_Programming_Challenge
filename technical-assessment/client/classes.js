@@ -122,8 +122,9 @@ class OctLine {
                 (x1*y2 + x2*y4 + x4*y1 - x1*y4 - x2*y1 - x4*y2) === 0) {
                 
                 // now that we know lines are colinear
-                // otherLine will be rotated 45 degrees from each endpoint
-                // then the rotated lines will each be checked for intersection
+                
+                /* otherLine will be rotated 45 degrees from each endpoint
+                then the rotated lines will each be checked for intersection */
 
                 // shifts end point of line to origin so it can be rotated
                 let shiftEndPoint = new Point(x4 - x3, y4 - y3);
@@ -164,6 +165,7 @@ class OctLine {
         
         let reducedLine = null;
         if (reducedPoint.equals(this.startPoint)) {// startPoint to be removed
+            
             /* new start point after shifting to origin, removing startPoint,
                 and shifting back                                           */
             let newStartPoint = new Point((this.startPoint.x-this.endPoint.x) * 
@@ -175,7 +177,8 @@ class OctLine {
                 // declares reduced line using startPoint
                 reducedLine = new OctLine(newStartPoint, this.endPoint);
 
-        } else if (reducedPoint.equals(this.endPoint)) {// endPoint removed
+        } else if (reducedPoint.equals(this.endPoint)) { // endPoint removed
+            
             /* new end point after shifting to origin, removing endPoint,
                 and shifting back                                           */
             let newEndPoint = new Point((this.endPoint.x - this.startPoint.x) * 
@@ -200,6 +203,7 @@ class LineGrid {
 
     // Postcondition:   new LineGrid instance is created
     constructor(width, height) {
+        // height and width of grid
         this.width = height;
         this.height = width;
         // starting point for game in progress
@@ -223,8 +227,9 @@ class LineGrid {
         // declares new OctLine to be drawn
         let validLine = new OctLine(startPoint, endPoint);
         
-        if (this.startingPoint === null) {// this is first line drawn
-            /* assigns starting and ending point of current game as
+        if (this.startingPoint === null) {// this is first line drawn in game
+            
+            /* assigns starting and ending point of game as
                starting and ending point of current line */
             this.startingPoint = new Point(startPoint.x, startPoint.y);
             this.endingPoint = new Point(endPoint.x, endPoint.y);
@@ -244,7 +249,7 @@ class LineGrid {
 
     // Precondition:    startPoint is valid point instance
     // Parameters:      startPoint - point to be tested 
-    // Returns:         true is point is first overall point
+    // Returns:         true if point is first overall point
     //                  or point is equal to startingPoint or endingPoint
     isValidStart(startPoint) {
 
@@ -269,6 +274,7 @@ class LineGrid {
                 
                 // loop for x values 1 away from startingPoint
                 for (let k = 1; k >= -1; k--) {
+                    
                     // creates temporary point used in intersection test
                     let tempPoint = new Point(testPoint.x - k, testPoint.y - j);
                     
@@ -329,6 +335,7 @@ class LineGrid {
                 (this.lines[i].endPoint.equals(this.startingPoint) &&
                 testLine.startPoint.equals(this.startingPoint))) {
 
+                // removes the end point where the two lines intersect
                 tempLine = tempLine.reduceLine(tempLine.endPoint);
 
             /* same as previous case, but only occurs when new line is drawn
@@ -336,6 +343,7 @@ class LineGrid {
             } else if (this.lines[i].startPoint.equals(this.startingPoint) &&
                         testLine.startPoint.equals(this.startingPoint)) {
 
+                // removes the start point where the two lines intersect
                 tempLine = tempLine.reduceLine(tempLine.startPoint);
             }
 
@@ -346,7 +354,7 @@ class LineGrid {
                 if (testLine.checkColinearInt(tempLine))
                     return false;
 
-            // lines aren't parallel so they intersect somewhere
+            // lines aren't parallel and intersect within given points
             } else if (testLine.checkBasicInt(tempLine) === true) {
                 
                 return false;
